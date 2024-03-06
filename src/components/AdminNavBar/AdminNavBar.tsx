@@ -2,7 +2,7 @@ import {NavLink} from 'react-router-dom';
 
 const AdminNavBar = () => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary px-3">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container-md">
         <NavLink className="navbar-brand" to="/admin">Turtle Pizza Admin</NavLink>
       </div>
