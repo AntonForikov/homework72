@@ -16,7 +16,7 @@ const DishItem: React.FC<Props> = ({id, title,image, price }) => {
   //   handleClose();
   //   dispatch(getContactsList());
   // };
-  console.log(id)
+  console.log(id);
 
   return (
     <>
@@ -34,7 +34,7 @@ const DishItem: React.FC<Props> = ({id, title,image, price }) => {
           <h4 className='ms-3'>{title}</h4>
         </div>
         <div className='d-flex align-items-center me-3'>
-          <h3 className='m-0'>{price} KGS</h3>
+          <h4 className='m-0'>{price} KGS</h4>
           <button className='btn btn-primary mx-3'>Edit</button>
           <button className='btn btn-danger'>Delete</button>
         </div>

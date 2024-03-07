@@ -1,14 +1,13 @@
-export interface ContactToSend {
-  name: string,
-  phone: string,
-  email: string,
-  photo: string
+export interface DishToSend {
+  tittle: string,
+  price: number,
+  image: string
 }
 
-export interface ContactsFromApi {
-  [id: string]: ContactToSend
+export interface DishesFromApi {
+  [id: string]: DishToSend
 }
 
-export interface ContactWithId extends ContactToSend {
-  id?: string
+export interface DishesWithId extends DishToSend {
+  id: string
 }

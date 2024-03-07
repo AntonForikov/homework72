@@ -1,21 +1,35 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../app/store';
-import {ContactWithId} from '../types';
+import {DishesWithId} from '../types';
+import {getDishesList} from './dishesThunk';
 
 interface ContactsState {
-  contactsList: ContactWithId[],
+  dishesList: DishesWithId[],
+  dishesLoading: boolean
 }
 
 const initialState: ContactsState = {
-  contactsList: [],
+  dishesList: [],
+  dishesLoading: false
 };
 
 const dishesSlice = createSlice({
-  name: 'pizza',
+  name: 'dishes',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {}
+  extraReducers: (builder) => {
+    builder.addCase(getDishesList.pending, (state) => {
+      state.dishesLoading = true;
+    }).addCase(getDishesList.fulfilled, (state, {payload: dishesList}) => {
+      state.dishesLoading = false;
+      state.dishesList = dishesList;
+      console.log(dishesList);
+    }).addCase(getDishesList.rejected, (state) => {
+      state.dishesLoading = false;
+    });
+  }
 });
 
-export const contactsReducer = dishesSlice.reducer;
-export const selectContactsList = (state: RootState) => state.contacts.contactsList;
+export const dishesReducer = dishesSlice.reducer;
+export const selectDishesList = (state: RootState) => state.dishes.dishesList;
+export const selectDishesListLoading = (state: RootState) => state.dishes.dishesLoading;

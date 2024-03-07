@@ -1,18 +1,18 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
-import {ContactsFromApi, ContactToSend, ContactWithId} from '../types';
+import {DishesFromApi, DishesWithId, DishToSend} from '../types';
 import axiosApi from '../axiosApi';
 
-export const addNewContact = createAsyncThunk<void, ContactToSend> (
-  'contacts/add',
-  async (contact) => {
-    await axiosApi.post('/contacts.json', contact);
+export const addNewDish = createAsyncThunk<void, DishToSend> (
+  'dish/add',
+  async (dish) => {
+    await axiosApi.post('/dishes.json', dish);
   }
 );
 
-export const getContactsList = createAsyncThunk (
-  'contacts/list',
+export const getDishesList = createAsyncThunk<DishesWithId[]> (
+  'dish/list',
   async () => {
-    const {data} = await axiosApi.get<ContactsFromApi | null>('/contacts.json');
+    const {data} = await axiosApi.get<DishesFromApi | null>('/dishes.json');
     if (data) {
       return Object.keys(data).map(id => ({
         id: id,
@@ -24,30 +24,30 @@ export const getContactsList = createAsyncThunk (
   }
 );
 
-export const getContactsById = createAsyncThunk (
-  'contacts/getById',
-  async (contactId: string | undefined) => {
-    const {data} = await axiosApi.get<ContactWithId | null>(`/contacts/${contactId}.json`);
-    if (data) {
-      return {...data, id: contactId};
-    } else {
-      return null;
-    }
-  }
-);
+// export const getContactsById = createAsyncThunk (
+//   'contacts/getById',
+//   async (contactId: string | undefined) => {
+//     const {data} = await axiosApi.get<ContactWithId | null>(`/contacts/${contactId}.json`);
+//     if (data) {
+//       return {...data, id: contactId};
+//     } else {
+//       return null;
+//     }
+//   }
+// );
 
-export const updateContact = createAsyncThunk<void, ContactWithId> (
-  'contacts/update',
-  async (contact) => {
-    const contactToSend: ContactToSend = {
-      name: contact.name,
-      email: contact.email,
-      phone: contact.phone,
-      photo: contact.photo
-    };
-    await axiosApi.put(`/contacts/${contact.id}.json`, contactToSend);
-  }
-);
+// export const updateContact = createAsyncThunk<void, ContactWithId> (
+//   'contacts/update',
+//   async (contact) => {
+//     const contactToSend: ContactToSend = {
+//       name: contact.name,
+//       email: contact.email,
+//       phone: contact.phone,
+//       photo: contact.photo
+//     };
+//     await axiosApi.put(`/contacts/${contact.id}.json`, contactToSend);
+//   }
+// );
 
 export const deleteContact = createAsyncThunk<void, string> (
   'contacts/delete',
