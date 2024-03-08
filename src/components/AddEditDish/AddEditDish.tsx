@@ -3,7 +3,7 @@ import {DishToSend} from '../../types';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {addNewDish, getDishById, updateDish} from '../../store/dishesThunk';
 import {useNavigate, useParams} from 'react-router-dom';
-import {selectDishToUpdate} from '../../store/dishesSlice';
+import {selectDishToUpdate, selectSaveButtonDisabler} from '../../store/dishesSlice';
 
 interface Prop {
   edit?: boolean;
@@ -20,6 +20,7 @@ const AddEditDish: React.FC<Prop> = ({edit=false}) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const dishToUpdate = useAppSelector(selectDishToUpdate);
+  const disabler = useAppSelector(selectSaveButtonDisabler);
   const [newDish, setNewDish] = useState(initialState);
 
   const changeField = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,7 +70,7 @@ const AddEditDish: React.FC<Prop> = ({edit=false}) => {
           <label htmlFor="price">Price:</label>
           <input className="form-control w-75" type="number" min={1} name="price" id="price" value={newDish.price} onChange={changeField} required/>
         </div>
-        <button className='btn btn-primary me-3' type='submit'>Save</button>
+        <button className='btn btn-primary me-3' type='submit' disabled={disabler}>Save</button>
       </form>
     </div>
   );

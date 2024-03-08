@@ -1,7 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {useAppDispatch} from '../../app/hooks';
+import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {deleteDish, getDishesList} from '../../store/dishesThunk';
+import {selectDeleteButtonDisabler} from '../../store/dishesSlice';
 
 interface Props {
   id: string,
@@ -11,7 +12,7 @@ interface Props {
 }
 
 const DishItem: React.FC<Props> = ({id, title,image, price }) => {
-  // const deleteButtonDisabler = useAppSelector(selectDeleteLoading);
+  const deleteButtonDisabler = useAppSelector(selectDeleteButtonDisabler);
   const dispatch = useAppDispatch();
 
   const onDelete = async () => {
@@ -40,7 +41,7 @@ const DishItem: React.FC<Props> = ({id, title,image, price }) => {
         <div className='d-flex align-items-center me-3'>
           <h4 className='m-0'>{price} KGS</h4>
           <Link to={`/admin/edit/${id}`} className='btn btn-primary mx-3'>Edit</Link>
-          <button className='btn btn-danger' onClick={onDelete}>Delete</button>
+          <button className='btn btn-danger' onClick={onDelete} disabled={id === deleteButtonDisabler}>Delete</button>
         </div>
       </div>
     </>
