@@ -6,7 +6,7 @@ import {deleteOrder, getOrderList} from './ordersThunk';
 interface OrdersState {
   orderList: OrderWithId[],
   ordersLoading: boolean,
-  deleteButtonDisabler: boolean,
+  deleteButtonDisabler: false | string,
 }
 
 const initialState: OrdersState = {
@@ -29,8 +29,8 @@ const orderSlice = createSlice({
       state.ordersLoading = false;
     });
 
-    builder.addCase(deleteOrder.pending, (state) => {
-      state.deleteButtonDisabler = true;
+    builder.addCase(deleteOrder.pending, (state, action) => {
+      state.deleteButtonDisabler = action.meta.arg;
     }).addCase(deleteOrder.fulfilled, (state) => {
       state.deleteButtonDisabler = false;
     }).addCase(deleteOrder.rejected, (state) => {

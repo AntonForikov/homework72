@@ -28,6 +28,6 @@ export const getOrderList = createAsyncThunk<OrderWithId[]>(
 export const deleteOrder = createAsyncThunk<void, string>(
   'order/delete',
   async (id) => {
-    await axiosApi.delete(`/order/${id}.json`);
+    await axiosApi.delete(`/orders/${id}.json`);
   }
 );
