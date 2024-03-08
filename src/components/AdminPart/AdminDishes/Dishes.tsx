@@ -1,10 +1,10 @@
 import DishItem from './DishItem';
 import {Link} from 'react-router-dom';
-import {selectDishesList, selectDishesListLoading} from '../../store/dishesSlice';
-import {useAppDispatch, useAppSelector} from '../../app/hooks';
+import {selectDishesList, selectDishesListLoading} from '../../../store/dishesSlice';
+import {useAppDispatch, useAppSelector} from '../../../app/hooks';
 import {useEffect} from 'react';
-import {getDishesList} from '../../store/dishesThunk';
-import Spinner from '../Spinner/Spinner';
+import {getDishesList} from '../../../store/dishesThunk';
+import Spinner from '../../Spinner/Spinner';
 
 const Dishes = () => {
   const dishes = useAppSelector(selectDishesList);
@@ -21,14 +21,14 @@ const Dishes = () => {
         <Link to='/admin/new-dish' className='btn btn-success'>Add new Dish</Link>
       </div>
       {loading
-        ? <div><Spinner/></div>
+        ? <div className="d-flex justify-content-center mt-3"><Spinner/></div>
         : dishes.length < 1 && !loading
           ? <div className="alert alert-danger mx-3" role="alert">There is no dishes in Database!</div>
           : dishes.map((dish) => {
             return <DishItem
               key={dish.id}
               id={dish.id}
-              title={dish.tittle}
+              title={dish.title}
               image={dish.image}
               price={dish.price}
             />;

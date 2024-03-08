@@ -1,22 +1,28 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../app/store';
 import {DishToSend, DishWithId} from '../types';
-import {addNewDish, deleteDish, getDishById, getDishesList, updateDish} from './dishesThunk';
+import {
+  addNewDish,
+  deleteDish,
+  getDishById,
+  getDishesList,
+  updateDish
+} from './dishesThunk';
 
-interface ContactsState {
+interface DishesState {
   dishesList: DishWithId[],
   dishToUpdate: DishToSend | null,
   dishesLoading: boolean,
   saveButtonDisabler: boolean,
-  deleteButtonDisabler: false | string
+  deleteButtonDisabler: false | string,
 }
 
-const initialState: ContactsState = {
+const initialState: DishesState = {
   dishesList: [],
   dishToUpdate: null,
   dishesLoading: false,
   saveButtonDisabler: false,
-  deleteButtonDisabler: false
+  deleteButtonDisabler: false,
 };
 
 const dishesSlice = createSlice({
@@ -39,7 +45,7 @@ const dishesSlice = createSlice({
 
     builder.addCase(addNewDish.pending, (state) => {
       state.saveButtonDisabler = true;
-    }).addCase(addNewDish.fulfilled, (state) =>  {
+    }).addCase(addNewDish.fulfilled, (state) => {
       state.saveButtonDisabler = false;
     }).addCase(addNewDish.rejected, (state) => {
       state.saveButtonDisabler = false;
@@ -47,7 +53,7 @@ const dishesSlice = createSlice({
 
     builder.addCase(updateDish.pending, (state) => {
       state.saveButtonDisabler = true;
-    }).addCase(updateDish.fulfilled, (state) =>  {
+    }).addCase(updateDish.fulfilled, (state) => {
       state.saveButtonDisabler = false;
     }).addCase(updateDish.rejected, (state) => {
       state.saveButtonDisabler = false;
@@ -55,7 +61,7 @@ const dishesSlice = createSlice({
 
     builder.addCase(deleteDish.pending, (state, action) => {
       state.deleteButtonDisabler = action.meta.arg;
-    }).addCase(deleteDish.fulfilled, (state) =>  {
+    }).addCase(deleteDish.fulfilled, (state) => {
       state.saveButtonDisabler = false;
     }).addCase(deleteDish.rejected, (state) => {
       state.saveButtonDisabler = false;

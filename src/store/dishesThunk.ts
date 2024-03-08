@@ -1,30 +1,36 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {DishesFromApi, DishWithId, DishToSend} from '../types';
 import axiosApi from '../axiosApi';
+import {updateDishes} from './cartSlice';
+import {AppDispatch} from '../app/store';
 
-export const addNewDish = createAsyncThunk<void, DishToSend> (
+export const addNewDish = createAsyncThunk<void, DishToSend>(
   'dish/add',
   async (dish) => {
     await axiosApi.post('/dishes.json', dish);
   }
 );
 
-export const getDishesList = createAsyncThunk<DishWithId[]> (
+export const getDishesList = createAsyncThunk<DishWithId[], void, {dispatch: AppDispatch}>(
   'dish/list',
-  async () => {
+  async (_, thunkAPI) => {
     const {data} = await axiosApi.get<DishesFromApi | null>('/dishes.json');
+
+    let newDishes: DishWithId[] = [];
+
     if (data) {
-      return Object.keys(data).map(id => ({
+      newDishes = Object.keys(data).map(id => ({
         id: id,
         ...data[id],
       }));
-    } else {
-      return [];
     }
+
+    thunkAPI.dispatch(updateDishes(newDishes));
+    return newDishes;
   }
 );
 
-export const getDishById = createAsyncThunk (
+export const getDishById = createAsyncThunk(
   'dish/getById',
   async (dishId: string) => {
     const {data} = await axiosApi.get<DishToSend | null>(`/dishes/${dishId}.json`);
@@ -36,19 +42,19 @@ export const getDishById = createAsyncThunk (
   }
 );
 
-export const updateDish = createAsyncThunk<void, DishWithId> (
+export const updateDish = createAsyncThunk<void, DishWithId>(
   'dish/update',
   async (dish) => {
     const dishToSend: DishToSend = {
-      tittle: dish.tittle,
+      title: dish.title,
       image: dish.image,
-      price: dish.price
+      price: dish.price,
     };
     await axiosApi.put(`/dishes/${dish.id}.json`, dishToSend);
   }
 );
 
-export const deleteDish = createAsyncThunk<void, string> (
+export const deleteDish = createAsyncThunk<void, string>(
   'dish/delete',
   async (id) => {
     await axiosApi.delete(`/dishes/${id}.json`);
