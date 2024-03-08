@@ -1,4 +1,7 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
+import {useAppDispatch} from '../../app/hooks';
+import {deleteDish, getDishesList} from '../../store/dishesThunk';
 
 interface Props {
   id: string,
@@ -9,14 +12,15 @@ interface Props {
 
 const DishItem: React.FC<Props> = ({id, title,image, price }) => {
   // const deleteButtonDisabler = useAppSelector(selectDeleteLoading);
-  // const dispatch = useAppDispatch();
-  //
-  // const onDelete = () => {
-  //   if (id) dispatch(deleteContact(id));
-  //   handleClose();
-  //   dispatch(getContactsList());
-  // };
-  console.log(id);
+  const dispatch = useAppDispatch();
+
+  const onDelete = async () => {
+    const confirmation = confirm('Are you sure?');
+    if (confirmation) {
+      await dispatch(deleteDish(id));
+      dispatch(getDishesList());
+    }
+  };
 
   return (
     <>
@@ -35,8 +39,8 @@ const DishItem: React.FC<Props> = ({id, title,image, price }) => {
         </div>
         <div className='d-flex align-items-center me-3'>
           <h4 className='m-0'>{price} KGS</h4>
-          <button className='btn btn-primary mx-3'>Edit</button>
-          <button className='btn btn-danger'>Delete</button>
+          <Link to={`/admin/edit/${id}`} className='btn btn-primary mx-3'>Edit</Link>
+          <button className='btn btn-danger' onClick={onDelete}>Delete</button>
         </div>
       </div>
     </>

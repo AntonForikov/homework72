@@ -8,6 +8,6 @@ export interface DishesFromApi {
   [id: string]: DishToSend
 }
 
-export interface DishesWithId extends DishToSend {
+export interface DishWithId extends DishToSend {
   id: string
 }

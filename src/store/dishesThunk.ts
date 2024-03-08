@@ -1,5 +1,5 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
-import {DishesFromApi, DishesWithId, DishToSend} from '../types';
+import {DishesFromApi, DishWithId, DishToSend} from '../types';
 import axiosApi from '../axiosApi';
 
 export const addNewDish = createAsyncThunk<void, DishToSend> (
@@ -9,7 +9,7 @@ export const addNewDish = createAsyncThunk<void, DishToSend> (
   }
 );
 
-export const getDishesList = createAsyncThunk<DishesWithId[]> (
+export const getDishesList = createAsyncThunk<DishWithId[]> (
   'dish/list',
   async () => {
     const {data} = await axiosApi.get<DishesFromApi | null>('/dishes.json');
@@ -24,35 +24,33 @@ export const getDishesList = createAsyncThunk<DishesWithId[]> (
   }
 );
 
-// export const getContactsById = createAsyncThunk (
-//   'contacts/getById',
-//   async (contactId: string | undefined) => {
-//     const {data} = await axiosApi.get<ContactWithId | null>(`/contacts/${contactId}.json`);
-//     if (data) {
-//       return {...data, id: contactId};
-//     } else {
-//       return null;
-//     }
-//   }
-// );
+export const getDishById = createAsyncThunk (
+  'dish/getById',
+  async (dishId: string) => {
+    const {data} = await axiosApi.get<DishToSend | null>(`/dishes/${dishId}.json`);
+    if (data) {
+      return {...data,};
+    } else {
+      return null;
+    }
+  }
+);
 
-// export const updateContact = createAsyncThunk<void, ContactWithId> (
-//   'contacts/update',
-//   async (contact) => {
-//     const contactToSend: ContactToSend = {
-//       name: contact.name,
-//       email: contact.email,
-//       phone: contact.phone,
-//       photo: contact.photo
-//     };
-//     await axiosApi.put(`/contacts/${contact.id}.json`, contactToSend);
-//   }
-// );
+export const updateDish = createAsyncThunk<void, DishWithId> (
+  'dish/update',
+  async (dish) => {
+    const dishToSend: DishToSend = {
+      tittle: dish.tittle,
+      image: dish.image,
+      price: dish.price
+    };
+    await axiosApi.put(`/dishes/${dish.id}.json`, dishToSend);
+  }
+);
 
-export const deleteContact = createAsyncThunk<void, string> (
-  'contacts/delete',
+export const deleteDish = createAsyncThunk<void, string> (
+  'dish/delete',
   async (id) => {
-    const confirmation = confirm('Are you sure?');
-    if (confirmation) await axiosApi.delete(`/contacts/${id}.json`);
+    await axiosApi.delete(`/dishes/${id}.json`);
   }
 );

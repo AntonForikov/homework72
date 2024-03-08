@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {DishToSend} from '../../types';
-import {useAppDispatch} from '../../app/hooks';
-import {addNewDish} from '../../store/dishesThunk';
+import {useAppDispatch, useAppSelector} from '../../app/hooks';
+import {addNewDish, getDishById, updateDish} from '../../store/dishesThunk';
+import {useNavigate, useParams} from 'react-router-dom';
+import {selectDishToUpdate} from '../../store/dishesSlice';
 
 interface Prop {
   edit?: boolean;
@@ -14,7 +16,10 @@ const initialState: DishToSend = {
 };
 
 const AddEditDish: React.FC<Prop> = ({edit=false}) => {
+  const {id} = useParams();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const dishToUpdate = useAppSelector(selectDishToUpdate);
   const [newDish, setNewDish] = useState(initialState);
 
   const changeField = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,15 +30,27 @@ const AddEditDish: React.FC<Prop> = ({edit=false}) => {
     }));
   };
 
-  const onFormSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (id) dispatch(getDishById(id));
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (dishToUpdate && edit) {
+      setNewDish(dishToUpdate);
+    }
+  }, [dishToUpdate, edit]);
+
+  const onFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // const slicedTitle = newDish.tittle.slice()[1];
-    // console.log(slicedTitle);
 
     if (newDish.tittle.slice()[0] === ' ') {
       alert("Your dish tittle should begin from letter not from whitespace.");
+    } else if (!edit) {
+      await dispatch(addNewDish(newDish));
+      navigate('/admin/dishes');
     } else {
-      dispatch(addNewDish(newDish));
+      if (id) await dispatch(updateDish({...newDish, id}));
+      navigate('/admin/dishes');
     }
   };
   return (

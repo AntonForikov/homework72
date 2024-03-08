@@ -12,6 +12,7 @@ const AdminLayout = () => {
         <Route path='admin/dishes' element={<Dishes />} />
         <Route path='admin/orders' element={<Orders/> } />
         <Route path='admin/new-dish' element={<AddEditDish /> } />
+        <Route path='admin/edit/:id' element={<AddEditDish edit={true} />} />
         <Route path='*' element={<h1>Not found</h1> } />
       </Routes>
     </>
